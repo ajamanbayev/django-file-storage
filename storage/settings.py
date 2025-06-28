@@ -1,7 +1,0 @@
-INSTALLED_APPS = [
-    'storage',
-]
-
-# File upload settings
-DATA_UPLOAD_MAX_MEMORY_SIZE = 16 * 1024 * 1024  # 16MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 16 * 1024 * 1024  # 16MB

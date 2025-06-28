@@ -59,7 +59,7 @@ def download_file(request, file_id):
     
     try:
         # Валидация файла
-        file_uuid = uuid.UUID(file_id)
+        file_uuid = uuid.UUID(str(file_id))
         file_obj = File.objects.get(id=file_uuid)
         
         parts = FilePart.objects.filter(file=file_obj)
