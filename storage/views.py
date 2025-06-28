@@ -56,12 +56,17 @@ def upload_file(request):
 @require_http_methods(["GET"])
 def download_file(request, file_id):
     user_id = request.GET.get('user_id', 'anonymous')
-    
+
     try:
-        # Валидация файла
-        file_uuid = uuid.UUID(str(file_id))
+        file_uuid = uuid.UUID(file_id)
+    except ValueError:
+        return JsonResponse(
+            {'error': 'Invalid file ID format'},
+            status=400
+        )
+
+    try:
         file_obj = File.objects.get(id=file_uuid)
-        
         parts = FilePart.objects.filter(file=file_obj)
         if parts.count() != 16:
             return HttpResponseBadRequest("Incomplete file parts")
@@ -78,9 +83,12 @@ def download_file(request, file_id):
         response = HttpResponse(file_data)
         response['Content-Disposition'] = f'attachment; filename="{file_obj.original_name}"'
         return response
-    
-    except (ValueError, ObjectDoesNotExist):
-        return HttpResponseBadRequest("Invalid file ID")
+
+    except File.DoesNotExist:
+        return JsonResponse(
+            {'error': 'File not found'},
+            status=404
+        )
     except Exception as e:
         return HttpResponseBadRequest(f"Error retrieving file: {str(e)}")
 

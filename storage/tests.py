@@ -64,4 +64,4 @@ class FileStorageTests(TestCase):
     def test_invalid_file_id(self):
         response = self.client.get('/api/files/invalid-id/?user_id=test_user')
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Invalid file ID", str(response.content))
+        self.assertIn("Invalid file ID format", str(response.content))
